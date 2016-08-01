@@ -1,0 +1,9 @@
+<?php
+return (object)[
+    'rootNamespace' => 'vakata\image',
+    'destDirectory' => 'docs',
+    'format' => 'github',
+    'classes' => [
+        '\\vakata\\image\\Image'
+    ],
+];
