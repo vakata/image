@@ -4,6 +4,10 @@ return (object)[
     'destDirectory' => 'docs',
     'format' => 'github',
     'classes' => [
-        '\\vakata\\image\\Image'
+        '\\vakata\\image\\Image',
+        '\\vakata\\image\\ImageInterface',
+        '\\vakata\\image\\driver\\DriverInterface',
+        '\\vakata\\image\\driver\\GD',
+        '\\vakata\\image\\driver\\IM'
     ],
 ];

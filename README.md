@@ -19,12 +19,13 @@ $ composer require vakata/image
 ## Usage
 
 ``` php
-$image = new \vakata\image\Image('image.jpg');
+$image = new \vakata\image\Image('image.png');
 header('Content-Type: image/jpeg');
 echo $image
     ->crop(200, 200)
     ->grayscale()
-    ->rotate(90);
+    ->rotate(90)
+    ->toJPG();
 ```
 
 Read more in the [API docs](docs/README.md)
