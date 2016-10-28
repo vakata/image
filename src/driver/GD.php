@@ -6,6 +6,9 @@ use vakata\image\ImageException;
 
 class GD implements DriverInterface
 {
+    protected $data;
+    protected $info;
+
     public function __construct(string $imagedata)
     {
         if (!extension_loaded('gd') || !function_exists('gd_info')) {
@@ -94,7 +97,7 @@ class GD implements DriverInterface
                 return ob_get_clean();
             case 'webp':
                 ob_start();
-                imagewebp($this->data);
+                imagewebp($this->data, null);
                 return ob_get_clean();
             default:
                 throw new ImageException('Unsupported format');

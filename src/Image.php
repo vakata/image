@@ -19,8 +19,8 @@ class Image implements ImageInterface
     {
         if ($drivers === null) {
             $drivers = [
-                \vakata\image\driver\IM::CLASS,
-                \vakata\image\driver\GD::CLASS
+                \vakata\image\driver\IM::class,
+                \vakata\image\driver\GD::class
             ];
         }
         $this->path = $path;

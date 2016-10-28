@@ -8,6 +8,8 @@ use \ImagickPixel;
 
 class IM implements DriverInterface
 {
+    protected $instance;
+    
     public function __construct(string $imagedata)
     {
         if (!extension_loaded('imagick')) {
