@@ -6,16 +6,27 @@ use vakata\image\driver\DriverInterface;
 
 class Image implements ImageInterface
 {
-    protected $path;
+    protected $data;
     protected $drivers;
     protected $operations;
 
     /**
+     * Create an instance from a path. If a driver is not specified the most suitable one will be autodetected.
+     * @param  string      $data the path to an image
+     * @param  array       $drivers optional array of drivers to use, leaving `null` will autodetect the best driver
+     * @return ImageInterface
+     */
+    public static function fromPath(string $path, array $drivers = null) : ImageInterface
+    {
+        return new static(file_get_contents($path), $drivers);
+    }
+
+    /**
      * Create an instance. If a driver is not specified the most suitable one will be autodetected.
-     * @param  string      $path the path to the image
+     * @param  string      $data the raw image data
      * @param  array       $drivers optional array of drivers to use, leaving `null` will autodetect the best driver
      */
-    public function __construct(string $path, array $drivers = null)
+    public function __construct(string $data, array $drivers = null)
     {
         if ($drivers === null) {
             $drivers = [
@@ -23,15 +34,26 @@ class Image implements ImageInterface
                 \vakata\image\driver\GD::class
             ];
         }
-        $this->path = $path;
+        $this->data = $data;
         $this->drivers = $drivers;
         $this->operations = [];
+    }
+    /**
+     * Resize the image, if one dimension is skipped it will be automatically calculated.
+     * @param  int|integer $width  the width of the resized image
+     * @param  int|integer $height the height of the resized image
+     * @return $this
+     */
+    public function resize(int $width = 0, int $height = 0) : ImageInterface
+    {
+        $this->operations[] = [ __FUNCTION__, func_get_args() ];
+        return $this;
     }
     /**
      * Crop a thumbnail with hardcoded dimensions, if one dimension is skipped it will be automatically calculated.
      * @param  int|integer $width  the width of the thumbnail
      * @param  int|integer $height the height of the thumbnail
-     * @return self
+     * @return $this
      */
     public function crop(int $width = 0, int $height = 0) : ImageInterface
     {
@@ -41,7 +63,7 @@ class Image implements ImageInterface
     /**
      * Rotate the image.
      * @param  float  $degrees clockwise angle to rotate
-     * @return self
+     * @return $this
      */
     public function rotate(float $degrees) : ImageInterface
     {
@@ -50,7 +72,7 @@ class Image implements ImageInterface
     }
     /**
      * Convert the image to grayscale.
-     * @return self
+     * @return $this
      */
     public function grayscale() : ImageInterface
     {
@@ -58,11 +80,11 @@ class Image implements ImageInterface
         return $this;
     }
     
-    protected function getDriver($imagedata)
+    protected function getDriver()
     {
         foreach ($this->drivers as $driverClass) {
             try {
-                return new $driverClass($imagedata);
+                return new $driverClass($this->data);
             } catch (ImageException $ignore) { }
         }
         throw new ImageException('No driver found');
@@ -78,7 +100,7 @@ class Image implements ImageInterface
         $operations = $this->operations;
         $operations[] = [ 'getImage', [ $format ] ];
         
-        $driver = $this->getDriver(file_get_contents($this->path));
+        $driver = $this->getDriver();
         return array_reduce($operations, function ($carry, $item) use ($driver) {
             return $driver->{$item[0]}(...$item[1]);
         });

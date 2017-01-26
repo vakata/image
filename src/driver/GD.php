@@ -18,6 +18,30 @@ class GD implements DriverInterface
         $this->info = getimagesizefromstring($imagedata);
     }
     /**
+     * Resize the image, if one dimension is skipped it will be automatically calculated.
+     * @param  int|integer $width  the width of the resized image
+     * @param  int|integer $height the height of the resized image
+     */
+    public function resize(int $width = 0, int $height = 0)
+    {
+        if (!$width && !$height) {
+            throw new ImageException('You must supply at least one dimension');
+        }
+        $iw = $this->info[0];
+        $ih = $this->info[1];
+        if (!$height || !$width) {
+            if (!$width) {
+                $width  = $height / $ih * $iw;
+            }
+            if (!$height) {
+                $height = $width  / $iw * $ih;
+            }
+        }
+        $di = imagecreatetruecolor($width, $height);
+        imagecopyresized($di, $this->data, 0, 0, 0, 0, $width, $height, $iw, $ih);
+        $this->data = $di;
+    }
+    /**
      * Crop a thumbnail with hardcoded dimensions, if one dimension is skipped it will be automatically calculated.
      * @param  int|integer $width  the width of the thumbnail
      * @param  int|integer $height the height of the thumbnail

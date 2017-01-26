@@ -19,6 +19,15 @@ class IM implements DriverInterface
         $this->instance->readImageBlob($imagedata);
     }
     /**
+     * Resize the image, if one dimension is skipped it will be automatically calculated.
+     * @param  int|integer $width  the width of the resized image
+     * @param  int|integer $height the height of the resized image
+     */
+    public function resize(int $width = 0, int $height = 0)
+    {
+        $this->instance->scaleImage($width, $height);
+    }
+    /**
      * Crop a thumbnail with hardcoded dimensions, if one dimension is skipped it will be automatically calculated.
      * @param  int|integer $width  the width of the thumbnail
      * @param  int|integer $height the height of the thumbnail
