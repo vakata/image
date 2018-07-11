@@ -5,7 +5,9 @@
 
 | Name | Description |
 |------|-------------|
+|[fromPath](#vakata\image\imagefrompath)|Create an instance from a path. If a driver is not specified the most suitable one will be autodetected.|
 |[__construct](#vakata\image\image__construct)|Create an instance. If a driver is not specified the most suitable one will be autodetected.|
+|[resize](#vakata\image\imageresize)|Resize the image, if one dimension is skipped it will be automatically calculated.|
 |[crop](#vakata\image\imagecrop)|Crop a thumbnail with hardcoded dimensions, if one dimension is skipped it will be automatically calculated.|
 |[rotate](#vakata\image\imagerotate)|Rotate the image.|
 |[grayscale](#vakata\image\imagegrayscale)|Convert the image to grayscale.|
@@ -20,21 +22,63 @@
 
 
 
+### vakata\image\Image::fromPath
+Create an instance from a path. If a driver is not specified the most suitable one will be autodetected.  
+
+
+```php
+public static function fromPath (  
+    string $data,  
+    array $drivers  
+) : \ImageInterface    
+```
+
+|  | Type | Description |
+|-----|-----|-----|
+| `$data` | `string` | the path to an image |
+| `$drivers` | `array` | optional array of drivers to use, leaving `null` will autodetect the best driver |
+|  |  |  |
+| `return` | `\ImageInterface` |  |
+
+---
+
+
 ### vakata\image\Image::__construct
 Create an instance. If a driver is not specified the most suitable one will be autodetected.  
 
 
 ```php
 public function __construct (  
-    string $path,  
+    string $data,  
     array $drivers  
 )   
 ```
 
 |  | Type | Description |
 |-----|-----|-----|
-| `$path` | `string` | the path to the image |
+| `$data` | `string` | the raw image data |
 | `$drivers` | `array` | optional array of drivers to use, leaving `null` will autodetect the best driver |
+
+---
+
+
+### vakata\image\Image::resize
+Resize the image, if one dimension is skipped it will be automatically calculated.  
+
+
+```php
+public function resize (  
+    int|integer $width,  
+    int|integer $height  
+) : $this    
+```
+
+|  | Type | Description |
+|-----|-----|-----|
+| `$width` | `int`, `integer` | the width of the resized image |
+| `$height` | `int`, `integer` | the height of the resized image |
+|  |  |  |
+| `return` | `$this` |  |
 
 ---
 
@@ -46,16 +90,18 @@ Crop a thumbnail with hardcoded dimensions, if one dimension is skipped it will 
 ```php
 public function crop (  
     int|integer $width,  
-    int|integer $height  
-) : self    
+    int|integer $height,  
+    array $keep  
+) : $this    
 ```
 
 |  | Type | Description |
 |-----|-----|-----|
 | `$width` | `int`, `integer` | the width of the thumbnail |
 | `$height` | `int`, `integer` | the height of the thumbnail |
+| `$keep` | `array` | optional array of x, y, w, h of the import part of the image |
 |  |  |  |
-| `return` | `self` |  |
+| `return` | `$this` |  |
 
 ---
 
@@ -67,14 +113,14 @@ Rotate the image.
 ```php
 public function rotate (  
     float $degrees  
-) : self    
+) : $this    
 ```
 
 |  | Type | Description |
 |-----|-----|-----|
 | `$degrees` | `float` | clockwise angle to rotate |
 |  |  |  |
-| `return` | `self` |  |
+| `return` | `$this` |  |
 
 ---
 
@@ -84,13 +130,13 @@ Convert the image to grayscale.
 
 
 ```php
-public function grayscale () : self    
+public function grayscale () : $this    
 ```
 
 |  | Type | Description |
 |-----|-----|-----|
 |  |  |  |
-| `return` | `self` |  |
+| `return` | `$this` |  |
 
 ---
 

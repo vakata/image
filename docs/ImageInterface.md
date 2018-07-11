@@ -5,6 +5,7 @@
 
 | Name | Description |
 |------|-------------|
+|[resize](#vakata\image\imageinterfaceresize)|Resize the image, if one dimension is skipped it will be automatically calculated.|
 |[crop](#vakata\image\imageinterfacecrop)|Crop a thumbnail with hardcoded dimensions, if one dimension is skipped it will be automatically calculated.|
 |[rotate](#vakata\image\imageinterfacerotate)|Rotate the image.|
 |[grayscale](#vakata\image\imageinterfacegrayscale)|Convert the image to grayscale.|
@@ -17,6 +18,27 @@
 
 ---
 
+
+
+### vakata\image\ImageInterface::resize
+Resize the image, if one dimension is skipped it will be automatically calculated.  
+
+
+```php
+public function resize (  
+    int|integer $width,  
+    int|integer $height  
+) : self    
+```
+
+|  | Type | Description |
+|-----|-----|-----|
+| `$width` | `int`, `integer` | the width of the resized image |
+| `$height` | `int`, `integer` | the height of the resized image |
+|  |  |  |
+| `return` | `self` |  |
+
+---
 
 
 ### vakata\image\ImageInterface::crop

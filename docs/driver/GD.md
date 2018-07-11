@@ -5,6 +5,7 @@
 
 | Name | Description |
 |------|-------------|
+|[resize](#vakata\image\driver\gdresize)|Resize the image, if one dimension is skipped it will be automatically calculated.|
 |[crop](#vakata\image\driver\gdcrop)|Crop a thumbnail with hardcoded dimensions, if one dimension is skipped it will be automatically calculated.|
 |[rotate](#vakata\image\driver\gdrotate)|Rotate the image.|
 |[grayscale](#vakata\image\driver\gdgrayscale)|Convert the image to grayscale.|
@@ -14,12 +15,12 @@
 
 
 
-### vakata\image\driver\GD::crop
-Crop a thumbnail with hardcoded dimensions, if one dimension is skipped it will be automatically calculated.  
+### vakata\image\driver\GD::resize
+Resize the image, if one dimension is skipped it will be automatically calculated.  
 
 
 ```php
-public function crop (  
+public function resize (  
     int|integer $width,  
     int|integer $height  
 )   
@@ -27,8 +28,29 @@ public function crop (
 
 |  | Type | Description |
 |-----|-----|-----|
+| `$width` | `int`, `integer` | the width of the resized image |
+| `$height` | `int`, `integer` | the height of the resized image |
+
+---
+
+
+### vakata\image\driver\GD::crop
+Crop a thumbnail with hardcoded dimensions, if one dimension is skipped it will be automatically calculated.  
+
+
+```php
+public function crop (  
+    int|integer $width,  
+    int|integer $height,  
+    array $keep  
+)   
+```
+
+|  | Type | Description |
+|-----|-----|-----|
 | `$width` | `int`, `integer` | the width of the thumbnail |
 | `$height` | `int`, `integer` | the height of the thumbnail |
+| `$keep` | `array` | optional array of x, y, w, h of the import part of the image |
 
 ---
 

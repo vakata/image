@@ -31,21 +31,60 @@ class IM implements DriverInterface
      * Crop a thumbnail with hardcoded dimensions, if one dimension is skipped it will be automatically calculated.
      * @param  int|integer $width  the width of the thumbnail
      * @param  int|integer $height the height of the thumbnail
+     * @param  array $keep optional array of x, y, w, h of the import part of the image
      */
-    public function crop(int $width = 0, int $height = 0)
+    public function crop(int $width = 0, int $height = 0, array $keep = [])
     {
         if (!$width && !$height) {
             throw new ImageException('You must supply at least one dimension');
         }
+        $iw = $this->instance->getImageWidth();
+        $ih = $this->instance->getImageHeight();
         if (!$height || !$width) {
-            $iw = $this->instance->getImageWidth();
-            $ih = $this->instance->getImageHeight();
             if (!$width) {
                 $width  = $height / $ih * $iw;
             }
             if (!$height) {
                 $height = $width  / $iw * $ih;
             }
+        }
+        $hasKeep = isset($keep['x']) && isset($keep['y']) && isset($keep['w']) && isset($keep['h']);
+        if ($hasKeep && (!(int)$keep['w'] || !(int)$keep['h'])) {
+            throw new ImageException('Invalid keep params');
+        }
+        if ($hasKeep) {
+            // get the higher coeficient
+            $coef = max($keep['w'] / $width, $keep['h'] / $height);
+            // calculate new width / height so that the keep zone will fit in the crop
+            $nw = $width * $coef;
+            $nh = $height * $coef;
+            $dx = ($nw - $keep['w']) / 2;
+            $dy = ($nh - $keep['h']) / 2;
+            $nx = $keep['x'] - $dx;
+            $ex = $nx + $nw;
+            $ny = $keep['y'] - $dy;
+            $ey = $ny + $nh;
+            if ($nx < 0) {
+                $ex += $nx * -1;
+                $ex = min($iw, $ex);
+                $nx = 0;
+            }
+            if ($ex > $iw) {
+                $nx = $nx - ($ex - $iw);
+                $nx = max(0, $nx);
+                $ex = $iw;
+            }
+            if ($ny < 0) {
+                $ey += $ny * -1;
+                $ey = min($ih, $ey);
+                $ny = 0;
+            }
+            if ($ey > $ih) {
+                $ny = $ny - ($ey - $ih);
+                $ny = max(0, $ny);
+                $ey = $ih;
+            }
+            $this->instance->cropImage($ex - $nx, $ey - $ny, $nx, $ny);
         }
         $this->instance->cropThumbnailImage($width, $height);
     }

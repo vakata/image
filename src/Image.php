@@ -53,9 +53,10 @@ class Image implements ImageInterface
      * Crop a thumbnail with hardcoded dimensions, if one dimension is skipped it will be automatically calculated.
      * @param  int|integer $width  the width of the thumbnail
      * @param  int|integer $height the height of the thumbnail
+     * @param  array $keep optional array of x, y, w, h of the import part of the image
      * @return $this
      */
-    public function crop(int $width = 0, int $height = 0) : ImageInterface
+    public function crop(int $width = 0, int $height = 0, array $keep = []) : ImageInterface
     {
         $this->operations[] = [ __FUNCTION__, func_get_args() ];
         return $this;
