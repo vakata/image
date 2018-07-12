@@ -15,8 +15,9 @@ interface DriverInterface
      * @param  int|integer $width  the width of the thumbnail
      * @param  int|integer $height the height of the thumbnail
      * @param  array $keep optional array of x, y, w, h of the import part of the image
+     * @param  array $keepEnlarge should the keep zone be enlarged to fit the thumbnail - defaults to false
      */
-    public function crop(int $width = 0, int $height = 0, array $keep = []);
+    public function crop(int $width = 0, int $height = 0, array $keep = [], bool $keepEnlarge = false);
     /**
      * Rotate the image.
      * @param  float  $degrees clockwise angle to rotate

@@ -32,8 +32,9 @@ class IM implements DriverInterface
      * @param  int|integer $width  the width of the thumbnail
      * @param  int|integer $height the height of the thumbnail
      * @param  array $keep optional array of x, y, w, h of the import part of the image
+     * @param  array $keepEnlarge should the keep zone be enlarged to fit the thumbnail - defaults to false
      */
-    public function crop(int $width = 0, int $height = 0, array $keep = [])
+    public function crop(int $width = 0, int $height = 0, array $keep = [], bool $keepEnlarge = false)
     {
         if (!$width && !$height) {
             throw new ImageException('You must supply at least one dimension');
@@ -53,6 +54,36 @@ class IM implements DriverInterface
             throw new ImageException('Invalid keep params');
         }
         if ($hasKeep) {
+            if ($keepEnlarge === false && $keep['w'] < $width && $keep['h'] < $height) {
+                $dw = ($width - $keep['w']) / 2;
+                $dh = ($height - $keep['h']) / 2;
+                $dw = min($keep['x'], $dw);
+                $nkx = $keep['x'] - $dw;
+                $ekx = $nkx + $keep['w'] + $dw * 2;
+                $nky = $keep['y'] - $dh;
+                $eky = $nky + $keep['h'] + $dh * 2;
+                if ($nkx < 0) {
+                    $ekx += $nkx * -1;
+                    $ekx = min($iw, $ekx);
+                    $nkx = 0;
+                }
+                if ($ekx > $iw) {
+                    $nkx = $nkx - ($ekx - $iw);
+                    $nkx = max(0, $nkx);
+                    $ekx = $iw;
+                }
+                if ($nky < 0) {
+                    $eky += $nky * -1;
+                    $eky = min($ih, $eky);
+                    $nky = 0;
+                }
+                if ($eky > $ih) {
+                    $nky = $nky - ($eky - $ih);
+                    $nky = max(0, $nky);
+                    $eky = $ih;
+                }
+                $keep = ['x'=>$nkx, 'y'=>$nky, 'w'=>$ekx - $nkx, 'h'=>$eky - $nky];
+            }
             // get the higher coeficient
             $coef = max($keep['w'] / $width, $keep['h'] / $height);
             // calculate new width / height so that the keep zone will fit in the crop
