@@ -15,9 +15,11 @@ interface ImageInterface
      * Crop a thumbnail with hardcoded dimensions, if one dimension is skipped it will be automatically calculated.
      * @param  int|integer $width  the width of the thumbnail
      * @param  int|integer $height the height of the thumbnail
+     * @param  array $keep optional array of x, y, w, h of the import part of the image
+     * @param  array $keepEnlarge should the keep zone be enlarged to fit the thumbnail - defaults to false
      * @return self
      */
-    public function crop(int $width = 0, int $height = 0) : ImageInterface;
+    public function crop(int $width = 0, int $height = 0, array $keep = [], bool $keepEnlarge = false) : ImageInterface;
     /**
      * Rotate the image.
      * @param  float  $degrees clockwise angle to rotate
