@@ -17,6 +17,14 @@ class GD implements DriverInterface
         $this->data = imagecreatefromstring($imagedata);
         $this->info = getimagesizefromstring($imagedata);
     }
+    public function width(): int
+    {
+        return $this->info[0];
+    }
+    public function height(): int
+    {
+        return $this->info[1];
+    }
     /**
      * Resize the image, if one dimension is skipped it will be automatically calculated.
      * @param  int|integer $width  the width of the resized image

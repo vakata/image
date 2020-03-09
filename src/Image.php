@@ -38,6 +38,44 @@ class Image implements ImageInterface
         $this->drivers = $drivers;
         $this->operations = [];
     }
+
+    public function width(): int
+    {
+        return $this->getDriver()->width();
+    }
+    public function height(): int
+    {
+        return $this->getDriver()->height();
+    }
+    public function isSquare(): bool
+    {
+        return $this->width() === $this->height();
+    }
+    public function isLandscape(): bool
+    {
+        return $this->width() > $this->height();
+    }
+    public function isPortrait(): bool
+    {
+        return $this->width() < $this->height();
+    }
+
+    public function resizeLongEdge(int $size, bool $enlarge = true): ImageInterface
+    {
+        $w = $this->width();
+        $h = $this->height();
+        if ($w > $h) {
+            if (!$enlarge && $w <= $size) {
+                return $this;
+            }
+            return $this->resize($size, 0);
+        }
+        if (!$enlarge && $h <= $size) {
+            return $this;
+        }
+        return $this->resize(0, $size);
+    }
+
     /**
      * Resize the image, if one dimension is skipped it will be automatically calculated.
      * @param  int|integer $width  the width of the resized image

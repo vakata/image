@@ -4,6 +4,13 @@ namespace vakata\image;
 
 interface ImageInterface
 {
+    public function width(): int;
+    public function height(): int;
+    public function isSquare(): bool;
+    public function isPortrait(): bool;
+    public function isLandscape(): bool;
+    public function resizeLongEdge(int $size, bool $enlarge = true): ImageInterface;
+
     /**
      * Resize the image, if one dimension is skipped it will be automatically calculated.
      * @param  int|integer $width  the width of the resized image

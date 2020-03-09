@@ -18,6 +18,14 @@ class IM implements DriverInterface
         $this->instance = new Imagick();
         $this->instance->readImageBlob($imagedata);
     }
+    public function width(): int
+    {
+        return $this->instance->getImageWidth();
+    }
+    public function height(): int
+    {
+        return $this->instance->getImageHeight();
+    }
     /**
      * Resize the image, if one dimension is skipped it will be automatically calculated.
      * @param  int|integer $width  the width of the resized image

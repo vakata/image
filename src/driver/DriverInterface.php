@@ -4,6 +4,8 @@ namespace vakata\image\driver;
 
 interface DriverInterface
 {
+    public function width(): int;
+    public function height(): int;
     /**
      * Resize the image, if one dimension is skipped it will be automatically calculated.
      * @param  int|integer $width  the width of the resized image
