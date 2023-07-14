@@ -46,6 +46,12 @@ class GD implements DriverInterface
             }
         }
         $di = imagecreatetruecolor($width, $height);
+
+        imagealphablending($di, false);
+        $transparency = imagecolorallocatealpha($di, 0, 0, 0, 127);
+        imagefill($di, 0, 0, $transparency);
+        imagesavealpha($di, true);
+
         imagecopyresized($di, $this->data, 0, 0, 0, 0, $width, $height, $iw, $ih);
         $this->data = $di;
     }
@@ -138,6 +144,12 @@ class GD implements DriverInterface
                 $ey = $ih;
             }
             $di = imagecreatetruecolor($ex - $nx, $ey - $ny);
+            
+            imagealphablending($di, false);
+            $transparency = imagecolorallocatealpha($di, 0, 0, 0, 127);
+            imagefill($di, 0, 0, $transparency);
+            imagesavealpha($di, true);
+
             imagecopyresampled($di, $this->data, 0, 0, $nx, $ny, $ex - $nx, $ey - $ny, $ex - $nx, $ey - $ny);
             $this->data = $di;
             $iw = $ex - $nx;
@@ -145,6 +157,12 @@ class GD implements DriverInterface
         }
         $mr = max($width / $iw, $height / $ih);
         $tm = imagecreatetruecolor($iw * $mr, $ih * $mr);
+
+        imagealphablending($tm, false);
+        $transparency = imagecolorallocatealpha($tm, 0, 0, 0, 127);
+        imagefill($tm, 0, 0, $transparency);
+        imagesavealpha($tm, true);
+
         imagecopyresized($tm, $this->data, 0, 0, 0, 0, $iw * $mr, $ih * $mr, $iw, $ih);
         imagedestroy($this->data);
         $this->data = $tm;
@@ -152,6 +170,12 @@ class GD implements DriverInterface
         $ih = $ih * $mr;
 
         $di = imagecreatetruecolor($width, $height);
+
+        imagealphablending($di, false);
+        $transparency = imagecolorallocatealpha($di, 0, 0, 0, 127);
+        imagefill($di, 0, 0, $transparency);
+        imagesavealpha($di, true);
+
         imagecopyresampled($di, $this->data, 0, 0, ($iw-$width)/2, ($ih-$height)/2, $width, $height, $width, $height);
         $this->data = $di;
     }
