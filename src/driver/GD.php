@@ -45,14 +45,14 @@ class GD implements DriverInterface
                 $height = $width  / $iw * $ih;
             }
         }
-        $di = imagecreatetruecolor($width, $height);
+        $di = imagecreatetruecolor((int)$width, (int)$height);
 
         imagealphablending($di, false);
         $transparency = imagecolorallocatealpha($di, 0, 0, 0, 127);
         imagefill($di, 0, 0, $transparency);
         imagesavealpha($di, true);
 
-        imagecopyresized($di, $this->data, 0, 0, 0, 0, $width, $height, $iw, $ih);
+        imagecopyresized($di, $this->data, 0, 0, 0, 0, (int)$width, (int)$height, (int)$iw, (int)$ih);
         $this->data = $di;
     }
     /**
@@ -143,40 +143,73 @@ class GD implements DriverInterface
                 $ny = max(0, $ny);
                 $ey = $ih;
             }
-            $di = imagecreatetruecolor($ex - $nx, $ey - $ny);
+            $di = imagecreatetruecolor((int)($ex - $nx), (int)($ey - $ny));
             
             imagealphablending($di, false);
             $transparency = imagecolorallocatealpha($di, 0, 0, 0, 127);
             imagefill($di, 0, 0, $transparency);
             imagesavealpha($di, true);
 
-            imagecopyresampled($di, $this->data, 0, 0, $nx, $ny, $ex - $nx, $ey - $ny, $ex - $nx, $ey - $ny);
+            imagecopyresampled(
+                $di,
+                $this->data,
+                0,
+                0,
+                (int)$nx,
+                (int)$ny,
+                (int)($ex - $nx),
+                (int)($ey - $ny),
+                (int)($ex - $nx),
+                (int)($ey - $ny)
+            );
             $this->data = $di;
             $iw = $ex - $nx;
             $ih = $ey - $ny;
         }
         $mr = max($width / $iw, $height / $ih);
-        $tm = imagecreatetruecolor($iw * $mr, $ih * $mr);
+        $tm = imagecreatetruecolor((int)($iw * $mr), (int)($ih * $mr));
 
         imagealphablending($tm, false);
         $transparency = imagecolorallocatealpha($tm, 0, 0, 0, 127);
         imagefill($tm, 0, 0, $transparency);
         imagesavealpha($tm, true);
 
-        imagecopyresized($tm, $this->data, 0, 0, 0, 0, $iw * $mr, $ih * $mr, $iw, $ih);
+        imagecopyresized(
+            $tm,
+            $this->data,
+            0,
+            0,
+            0,
+            0,
+            (int)($iw * $mr),
+            (int)($ih * $mr),
+            (int)$iw,
+            (int)$ih
+        );
         imagedestroy($this->data);
         $this->data = $tm;
         $iw = $iw * $mr;
         $ih = $ih * $mr;
 
-        $di = imagecreatetruecolor($width, $height);
+        $di = imagecreatetruecolor((int)$width, (int)$height);
 
         imagealphablending($di, false);
         $transparency = imagecolorallocatealpha($di, 0, 0, 0, 127);
         imagefill($di, 0, 0, $transparency);
         imagesavealpha($di, true);
 
-        imagecopyresampled($di, $this->data, 0, 0, ($iw-$width)/2, ($ih-$height)/2, $width, $height, $width, $height);
+        imagecopyresampled(
+            $di,
+            $this->data,
+            0,
+            0,
+            (int)(($iw-$width)/2),
+            (int)(($ih-$height)/2),
+            (int)$width,
+            (int)$height,
+            (int)$width,
+            (int)$height
+        );
         $this->data = $di;
     }
     /**

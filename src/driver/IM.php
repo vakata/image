@@ -123,9 +123,9 @@ class IM implements DriverInterface
                 $ny = max(0, $ny);
                 $ey = $ih;
             }
-            $this->instance->cropImage($ex - $nx, $ey - $ny, $nx, $ny);
+            $this->instance->cropImage((int)($ex - $nx), (int)($ey - $ny), (int)$nx, (int)$ny);
         }
-        $this->instance->cropThumbnailImage($width, $height);
+        $this->instance->cropThumbnailImage((int)$width, (int)$height);
     }
     /**
      * Rotate the image.
@@ -140,7 +140,7 @@ class IM implements DriverInterface
      */
     public function grayscale()
     {
-        $this->instance->transformimagecolorspace(imagick::COLORSPACE_GRAY);
+        $this->instance->transformimagecolorspace(Imagick::COLORSPACE_GRAY);
         $this->instance->separateImageChannel(1);
     }
     /**
