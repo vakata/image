@@ -95,7 +95,12 @@ class Image implements ImageInterface
      * @param  array $keepEnlarge should the keep zone be enlarged to fit the thumbnail - defaults to false
      * @return $this
      */
-    public function crop(int $width = 0, int $height = 0, array $keep = [], bool $keepEnlarge = false) : ImageInterface
+    public function thumbnail(int $width = 0, int $height = 0, array $keep = [], bool $keepEnlarge = false) : ImageInterface
+    {
+        $this->operations[] = [ __FUNCTION__, func_get_args() ];
+        return $this;
+    }
+    public function crop(int $width = 0, int $height = 0, int $x = 0, int $y = 0) : ImageInterface
     {
         $this->operations[] = [ __FUNCTION__, func_get_args() ];
         return $this;

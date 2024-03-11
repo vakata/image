@@ -26,7 +26,8 @@ interface ImageInterface
      * @param  array $keepEnlarge should the keep zone be enlarged to fit the thumbnail - defaults to false
      * @return self
      */
-    public function crop(int $width = 0, int $height = 0, array $keep = [], bool $keepEnlarge = false) : ImageInterface;
+    public function thumbnail(int $width = 0, int $height = 0, array $keep = [], bool $keepEnlarge = false) : ImageInterface;
+    public function crop(int $width = 0, int $height = 0, int $x = 0, int $y = 0) : ImageInterface;
     /**
      * Rotate the image.
      * @param  float  $degrees clockwise angle to rotate

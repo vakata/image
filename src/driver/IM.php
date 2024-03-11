@@ -42,7 +42,7 @@ class IM implements DriverInterface
      * @param  array $keep optional array of x, y, w, h of the import part of the image
      * @param  array $keepEnlarge should the keep zone be enlarged to fit the thumbnail - defaults to false
      */
-    public function crop(int $width = 0, int $height = 0, array $keep = [], bool $keepEnlarge = false)
+    public function thumbnail(int $width = 0, int $height = 0, array $keep = [], bool $keepEnlarge = false)
     {
         if (!$width && !$height) {
             throw new ImageException('You must supply at least one dimension');
@@ -126,6 +126,13 @@ class IM implements DriverInterface
             $this->instance->cropImage((int)($ex - $nx), (int)($ey - $ny), (int)$nx, (int)$ny);
         }
         $this->instance->cropThumbnailImage((int)$width, (int)$height);
+    }
+    public function crop(int $width = 0, int $height = 0, int $x = 0, int $y = 0)
+    {
+        if (!$width || !$height) {
+            throw new ImageException('You must supply both dimensions');
+        }
+        $this->instance->cropImage($width, $height, $x, $y);
     }
     /**
      * Rotate the image.
