@@ -12,13 +12,13 @@ class Image implements ImageInterface
 
     /**
      * Create an instance from a path. If a driver is not specified the most suitable one will be autodetected.
-     * @param  string      $data the path to an image
+     * @param  string      $path the path to an image
      * @param  array       $drivers optional array of drivers to use, leaving `null` will autodetect the best driver
      * @return ImageInterface
      */
-    public static function fromPath(string $path, array $drivers = null) : ImageInterface
+    public static function fromPath(string $path, ?array $drivers = null) : ImageInterface
     {
-        return new static(file_get_contents($path), $drivers);
+        return new self(file_get_contents($path), $drivers);
     }
 
     /**
@@ -26,7 +26,7 @@ class Image implements ImageInterface
      * @param  string      $data the raw image data
      * @param  array       $drivers optional array of drivers to use, leaving `null` will autodetect the best driver
      */
-    public function __construct(string $data, array $drivers = null)
+    public function __construct(string $data, ?array $drivers = null)
     {
         if ($drivers === null) {
             $drivers = [
@@ -92,7 +92,7 @@ class Image implements ImageInterface
      * @param  int|integer $width  the width of the thumbnail
      * @param  int|integer $height the height of the thumbnail
      * @param  array $keep optional array of x, y, w, h of the import part of the image
-     * @param  array $keepEnlarge should the keep zone be enlarged to fit the thumbnail - defaults to false
+     * @param  bool $keepEnlarge should the keep zone be enlarged to fit the thumbnail - defaults to false
      * @return $this
      */
     public function thumbnail(int $width = 0, int $height = 0, array $keep = [], bool $keepEnlarge = false) : ImageInterface
@@ -140,7 +140,7 @@ class Image implements ImageInterface
      * @param  string|null   $format the format to use (optional, if null the current format will be used)
      * @return string binary string of the converted image
      */
-    public function toString(string $format = null) : string
+    public function toString(?string $format = null) : string
     {
         $operations = $this->operations;
         $operations[] = [ 'getImage', [ $format ] ];
