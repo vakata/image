@@ -29,6 +29,7 @@ class IM implements DriverInterface
                 $this->instance->rotateimage("#000", 90);
                 break;
         }
+        $this->instance->setImageOrientation(Imagick::ORIENTATION_TOPLEFT);
     }
     public function width(): int
     {
