@@ -16,6 +16,19 @@ class GD implements DriverInterface
         }
         $this->data = imagecreatefromstring($imagedata);
         $this->info = getimagesizefromstring($imagedata);
+        $rotate = 0;
+        if (function_exists('exif_read_data')) {
+            $rotate = @exif_read_data(
+                'data://' . $this->info['mime'] . ';base64,' . base64_encode($imagedata)
+            ) ?: [];
+            $rotate = $rotate['Orientation'] ?? 0;
+            $this->data = imagerotate($this->data, array_values([0, 0, 0, 180, 0, 0, -90, 0, 90])[$rotate], 0);
+            if ($rotate === 6 || $rotate === 8) {
+                $tmp = $this->info[0];
+                $this->info[0] = $this->info[1];
+                $this->info[1] = $tmp;
+            }
+        }
     }
     public function width(): int
     {
@@ -144,7 +157,7 @@ class GD implements DriverInterface
                 $ey = $ih;
             }
             $di = imagecreatetruecolor((int)($ex - $nx), (int)($ey - $ny));
-            
+
             imagealphablending($di, false);
             $transparency = imagecolorallocatealpha($di, 0, 0, 0, 127);
             imagefill($di, 0, 0, $transparency);

@@ -9,7 +9,7 @@ use \ImagickPixel;
 class IM implements DriverInterface
 {
     protected $instance;
-    
+
     public function __construct(string $imagedata)
     {
         if (!extension_loaded('imagick')) {
@@ -17,6 +17,18 @@ class IM implements DriverInterface
         }
         $this->instance = new Imagick();
         $this->instance->readImageBlob($imagedata);
+        $orientation = $this->instance->getImageOrientation();
+        switch ($orientation) {
+            case 8:
+                $this->instance->rotateimage("#000", -90);
+                break;
+            case 3:
+                $this->instance->rotateimage("#000", 180);
+                break;
+            case 6:
+                $this->instance->rotateimage("#000", 90);
+                break;
+        }
     }
     public function width(): int
     {
